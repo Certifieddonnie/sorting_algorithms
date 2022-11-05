@@ -1,6 +1,20 @@
 #include "sort.h"
 
 /**
+ * swap - compares 2 numbers
+ * and interchanges them if the first is larger
+ * @a: the numbers to be compared
+ * @b: the numbers to be compared
+ * Return: Nothing.
+ */
+void swap(int *a, int *b)
+{
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+/**
  * bubble_sort - Function that sorts an array of integers in
  * ascending order using the Bubble sort algorithm.
  * @array: set of integers
@@ -12,6 +26,8 @@
 void bubble_sort(int *array, size_t size)
 {
 	int i, j = 0;
+	if (array == NULL || size < 2)
+		return;
 
 	/*Loop responsible for checking the array again*/
 	for (i = 0; i < size - 1; i++)
