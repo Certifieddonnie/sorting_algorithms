@@ -1,4 +1,4 @@
-#include "sort.h"
+include "sort.h"
 /*
  * swap - compares 2 numbers
  * and interchanges them if the first is larger
@@ -19,27 +19,37 @@ void swap(int *a, int *b)
  * @size: size of the array.
  * Return: nothing
  */
- void selection_sort(int *array, size_t size)
- {
-     size_t i, j, min_idx;
-/*Loop to iterate through the whole array.*/
-     for (i = 0; i < (size - 1); i++)
-     {
-         /* Setting up the minimum element in the array*/
-         min_idx = i;
-         for (j = i + 1; j < size; j++) /*inner loop to do the comparison*/
-         {
-             /*condition to compare the values.*/
-             if (array[j] < array[min_idx])
-             {
-                 min_idx = j;/*sets the new minimum element*/
-             }
 
-             /*if the present index isn't same as last, swaps the value.*/
-             if (min_idx != i)
-             {
-                 swap(&array[min_idx], &array[i]);
-             }
-         }
-     }
- }
+void selection_sort(int *array, size_t size)
+{
+	int *min;
+	size_t i, j;
+
+	if (array == NULL || size < 2)
+		return;
+
+ /*Loop to iterate through the whole array.*/
+	for (i = 0; i < size - 1; i++)
+	{
+        /* Setting up the minimum element in the array*/
+		min = array + i;
+		for (j = i + 1; j < size; j++)/*inner loop to do the comparison*/
+        {
+            /*condition to compare the values.*/
+            if (array[j] < *min)
+            {
+                min = (array + j);
+            }
+            else
+            {
+                min = min;
+            }
+        }
+/*if the present index isn't same as last, swaps the value.*/
+		if ((array + i) != min)
+		{
+			swap(array + i, min);
+			print_array(array, size);
+		}
+	}
+}
