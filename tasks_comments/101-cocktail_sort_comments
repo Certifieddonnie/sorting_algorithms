@@ -1,0 +1,100 @@
+/**
+ * forward swap - Function to sort the values during the forward pass.
+ * @list: head of the linked list.
+ * @end: pointer to the tail of the list
+ * @start: pointer to the list interating it.
+ *
+ */
+void forward_swap(listint_t **list, listint_t **end, listint_t **start)
+{
+    listint_t *temp; /*Sets a new node that holds the value temporarily.*/
+
+    temp = (*start)->next;/*assigns it to the start next node.*/
+    if ((*start)->prev != NULL) /*condition to check if the start previous node is not NULL.*/
+        (*start)->prev->next = temp;/*sets it next to the value held in temp. */
+    else
+        *list = temp;/*else makes temp the new head.*/
+    temp->prev = (*start)->prev;/*temp previous assigns to start previous.*/
+    (*start)->next = temp->next;/*assigns it next to the temp next.*/
+    if (temp->next != NULL)/*if temp next is not null it assigns its prev to the start node.*/
+        temp->next->prev = *start;
+    else
+        *end = *start; /*else it assigns it end node to the start node.*/
+    (*start)->prev = temp;/*the start prev is assigned to temp.*/
+    temp->next = *start;/*temp next is assigned to start.*/
+    *start = temp;/*and start to temp.*/
+}
+
+/**
+ * backward swap - Function to sort the values during the forward pass.
+ * @list: head of the linked list.
+ * @end: pointer to the tail of the list
+ * @start: pointer to the list interating it.
+ *
+ */
+void backward_swap(listint_t **list, listint_t **end, listint_t **start)
+{
+    listint_t *temp;/*temporary node to hold value*/
+    
+    temp = (*start)->prev;/*assigns temp to start previous.*/
+    if ((*start)->next != NULL)/*checks if start next isnt null and assigns its prev to temp.*/
+        (*start)->next->prev = temp;
+    else
+        *end = temp;/*else assigns end node to the temp node.*/
+    temp->next = (*start)->next;/*temp next assigns to start next.*/
+    (*start)->prev = temp->prev;/*start prev to temp prev*/
+    if (temp->prev != NULL)/*if not null, its next is to start.*/
+        temp->prev->next = *start;
+    else
+        *list = *start;/*else head is to be start.*/
+    (*start)->next = temp;/*start next to temp node.*/
+    temp->prev = *start;/*temp prev to the start node.*/
+    *start = temp;/*assigns temp to start node.*/
+}
+
+void cocktail_sort_list(listint_t **list)
+{
+    listint_t *start, *end;
+    int sort = 1;
+
+    /*Condition to filter off null list.*/
+    if (!*list || !list || !(*list)->next)
+        return;
+
+    /*Loop to make the end pointer point to the last node*/
+    for (end = *list; end->next != NULL;)
+        end = end->next;
+    
+    /*Outer Loop that starts the sorting process. while sort is 1*/
+    while (sort == 1)
+    {
+        sort = 0;
+        start = *list;/*sets the start pointer to head node.*/
+        /*Forward Pass Loop. as long as start and end don't meet.*/
+        while (start != end)
+        {
+            if (start->n > start->next->n)/*compares the node's data for sorting.*/
+            {
+                forward_swap(list, &end, &start);/*Calls the forward pass swap function*/
+                print_list((const listint_t *)*list);/*prints the list after swap occurs.*/
+                sort = 1;/*sets sort to 1.*/
+            }
+            start = start->next;/*increments the forward pass loop.*/
+        }
+
+        /*Backward Pass that sets start pointer to the previous node before end.*/
+        start = start->prev;
+        while (start != *list)/*condition not to meet the head node of those that are sorted.*/
+        {
+            if (start->n < start->prev->n)/*compares the value for sorting.*/
+            {
+                backward_swap(list, &end, &start);/*calls the backward pass swap function.*/
+                print_list((const listint_t *)*list);/*prints the list after swapping.*/
+                sort = 1;/*sets sort to 1.*/
+            }
+            start = start->prev;/*incrementation*/
+        }
+    }
+}
+
+
